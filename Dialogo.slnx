@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Dialogo.Api/Dialogo.Api.csproj" />
+    <Project Path="src/Dialogo.Application/Dialogo.Application.csproj" />
+    <Project Path="src/Dialogo.Domain/Dialogo.Domain.csproj" />
+    <Project Path="src/Dialogo.Infrastructure/Dialogo.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Dialogo.Application.Tests/Dialogo.Application.Tests.csproj" />
+    <Project Path="tests/Dialogo.Domain.Tests/Dialogo.Domain.Tests.csproj" />
+    <Project Path="tests/Dialogo.Infrastructure.Tests/Dialogo.Infrastructure.Tests.csproj" />
+  </Folder>
+</Solution>

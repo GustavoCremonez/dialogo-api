@@ -1,0 +1,100 @@
+## .NET
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.cache
+
+## IDE
+.vs/
+.vscode/
+.idea/
+*.sln.docstates
+
+## User-specific files
+*.rsuser
+*.userprefs
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+## Rider
+.idea/
+*.sln.iml
+
+## Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+
+## NCrunch
+*.ncrunch*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+## Chutzpah
+_Chutzpah*
+
+## Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+## JustCode
+.JustCode
+
+## TeamCity
+_TeamCity*
+
+## DotCover
+*.dotCover
+
+## AxoCover
+.axoCover/*
+!.axoCover/settings.json
+
+## Coverlet
+coverage*.json
+coverage*.xml
+coverage*.info
+
+## Visual Studio code coverage
+*.coverage
+*.coveragexml
+
+## NCover
+_NCover*
+
+## coverlet
+coverage.cobertura.xml
+
+## Local env files
+appsettings.local.json
+appsettings.*.local.json
+.env
+.env.*
+
+## macOS
+.DS_Store
+
+## Windows
+Thumbs.db
+ehthumbs.db
