@@ -1,0 +1,6 @@
+@Dialogo.Api_HostAddress = http://localhost:5149
+
+GET {{Dialogo.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
