@@ -29,6 +29,14 @@ public static class ResultExtensions
         return ToErrorResult(result.Error);
     }
 
+    public static IActionResult ToNoContentResult(this Result result)
+    {
+        if (result.IsSuccess)
+            return new NoContentResult();
+
+        return ToErrorResult(result.Error);
+    }
+
     public static IActionResult ToNoContentResult<T>(this Result<T> result)
     {
         if (result.IsSuccess)

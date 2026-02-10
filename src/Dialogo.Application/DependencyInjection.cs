@@ -1,4 +1,8 @@
 using System.Reflection;
+using Dialogo.Application.Features.Auth.Login;
+using Dialogo.Application.Features.Auth.Logout;
+using Dialogo.Application.Features.Auth.Refresh;
+using Dialogo.Application.Features.Auth.Register;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +16,11 @@ public static class DependencyInjection
 
         services.AddAutoMapper(assembly);
         services.AddValidatorsFromAssembly(assembly);
+
+        services.AddScoped<RegisterHandler>();
+        services.AddScoped<LoginHandler>();
+        services.AddScoped<RefreshTokenHandler>();
+        services.AddScoped<LogoutHandler>();
 
         return services;
     }
