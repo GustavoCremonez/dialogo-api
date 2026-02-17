@@ -1,12 +1,10 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using System.Text;
 using AspNetCoreRateLimit;
 using Dialogo.Api.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Text;
 
 namespace Dialogo.Api.Extensions;
 
@@ -32,7 +30,7 @@ public static class ServiceCollectionExtensions
 
             options.AddPolicy("ProductionPolicy", builder =>
             {
-                var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+                var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
                     ?? new[] { "https://dialogo.com" };
 
                 builder.WithOrigins(allowedOrigins)
@@ -66,7 +64,7 @@ public static class ServiceCollectionExtensions
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
-                Type = SecuritySchemeType.Http,
+                Type = SecuritySchemeType.ApiKey,
                 Scheme = "bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
@@ -156,7 +154,7 @@ public static class ServiceCollectionExtensions
                 OnChallenge = context =>
                 {
                     var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                    logger.LogWarning("JWT Authentication challenge. Error: {Error}, ErrorDescription: {ErrorDescription}", 
+                    logger.LogWarning("JWT Authentication challenge. Error: {Error}, ErrorDescription: {ErrorDescription}",
                         context.Error, context.ErrorDescription);
                     return Task.CompletedTask;
                 }

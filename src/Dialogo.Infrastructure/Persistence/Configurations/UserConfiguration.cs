@@ -30,6 +30,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsActive)
             .IsRequired();
 
+        builder.HasIndex(x => x.PublicCode)
+            .IsUnique();
+
+        builder.Property(x => x.PublicCode)
+               .HasMaxLength(12);
+
         builder.Property(u => u.CreatedAt)
             .IsRequired();
 
