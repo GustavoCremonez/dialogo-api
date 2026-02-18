@@ -1,3 +1,5 @@
+using NanoidDotNet;
+
 namespace Dialogo.Domain.Entities;
 
 public class User
@@ -7,9 +9,13 @@ public class User
     public string PasswordHash { get; private set; } = string.Empty;
     public string Name { get; private set; } = string.Empty;
     public bool IsActive { get; private set; }
+    public string PublicCode { get; private set; } = string.Empty;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public DateTime? LastLoginAt { get; private set; }
+    public ICollection<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();
+    public ICollection<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
+    public ICollection<Friendship> Friendships { get; set; } = new List<Friendship>();
 
     private User() { }
 
@@ -25,6 +31,7 @@ public class User
             throw new ArgumentException("O nome é obrigatório.", nameof(name));
 
         var now = DateTime.UtcNow;
+        var publicCode = Nanoid.Generate(size: 12);
 
         return new User
         {
@@ -32,9 +39,10 @@ public class User
             Email = email.ToLowerInvariant(),
             PasswordHash = passwordHash,
             Name = name,
+            PublicCode = publicCode,
             IsActive = true,
             CreatedAt = now,
-            UpdatedAt = now
+            UpdatedAt = now,
         };
     }
 

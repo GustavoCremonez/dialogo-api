@@ -1,7 +1,7 @@
-using System.Linq.Expressions;
 using Dialogo.Domain.Entities;
 using Dialogo.Domain.Shared.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Dialogo.Infrastructure.Persistence.Repositories;
 
@@ -14,24 +14,24 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         _context = context;
     }
 
-    public async Task<RefreshToken?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<RefreshToken?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _context.RefreshTokens.FindAsync([id], cancellationToken);
     }
 
-    public async Task<IEnumerable<RefreshToken>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<RefreshToken>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _context.RefreshTokens.ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<RefreshToken>> FindAsync(Expression<Func<RefreshToken, bool>> predicate, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<RefreshToken>> FindAsync(Expression<Func<RefreshToken, bool>> predicate, CancellationToken cancellationToken)
     {
         return await _context.RefreshTokens.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public void Add(RefreshToken entity)
+    public async Task AddAsync(RefreshToken entity)
     {
-        _context.RefreshTokens.Add(entity);
+        await _context.RefreshTokens.AddAsync(entity);
     }
 
     public void Update(RefreshToken entity)
@@ -44,14 +44,14 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         _context.RefreshTokens.Remove(entity);
     }
 
-    public async Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken cancellationToken = default)
+    public async Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken cancellationToken)
     {
         return await _context.RefreshTokens
             .Include(rt => rt.User)
             .FirstOrDefaultAsync(rt => rt.Token == token, cancellationToken);
     }
 
-    public async Task<IEnumerable<RefreshToken>> GetActiveByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<RefreshToken>> GetActiveByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
         var now = DateTime.UtcNow;
         return await _context.RefreshTokens
@@ -59,7 +59,7 @@ public class RefreshTokenRepository : IRefreshTokenRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task RevokeAllByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task RevokeAllByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
         var tokens = await _context.RefreshTokens
             .Where(rt => rt.UserId == userId && rt.RevokedAt == null)

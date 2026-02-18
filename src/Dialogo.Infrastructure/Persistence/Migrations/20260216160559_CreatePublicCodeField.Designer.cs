@@ -3,6 +3,7 @@ using System;
 using Dialogo.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dialogo.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260216160559_CreatePublicCodeField")]
+    partial class CreatePublicCodeField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Dialogo.Infrastructure.Persistence.Migrations
                     b.HasIndex("FromUserId", "ToUserId")
                         .IsUnique();
 
-                    b.ToTable("FriendRequests", (string)null);
+                    b.ToTable("FriendRequest");
                 });
 
             modelBuilder.Entity("Dialogo.Domain.Entities.Friendship", b =>
@@ -75,7 +78,7 @@ namespace Dialogo.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId", "FriendUserId")
                         .IsUnique();
 
-                    b.ToTable("Friendships", (string)null);
+                    b.ToTable("Friendship");
                 });
 
             modelBuilder.Entity("Dialogo.Domain.Entities.RefreshToken", b =>
