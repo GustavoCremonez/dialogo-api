@@ -55,7 +55,7 @@ public class LoginHandler
         var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(refreshTokenExpirationDays);
 
         var refreshToken = RefreshToken.Create(user.Id, refreshTokenValue, refreshTokenExpiresAt);
-        _refreshTokenRepository.Add(refreshToken);
+        await _refreshTokenRepository.AddAsync(refreshToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

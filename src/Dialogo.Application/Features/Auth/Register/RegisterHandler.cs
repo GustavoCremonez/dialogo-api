@@ -42,7 +42,7 @@ public class RegisterHandler
         var passwordHash = _passwordHasher.HashPassword(request.Password);
         var user = User.Create(request.Email, passwordHash, request.Name);
 
-        _userRepository.Add(user);
+        await _userRepository.AddAsync(user);
 
         var accessToken = _jwtTokenGenerator.GenerateAccessToken(user.Id, user.Email, user.Name);
         var refreshTokenValue = _jwtTokenGenerator.GenerateRefreshToken();
@@ -52,7 +52,7 @@ public class RegisterHandler
         var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(refreshTokenExpirationDays);
 
         var refreshToken = RefreshToken.Create(user.Id, refreshTokenValue, refreshTokenExpiresAt);
-        _refreshTokenRepository.Add(refreshToken);
+        await _refreshTokenRepository.AddAsync(refreshToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -20,6 +20,8 @@ public class FriendRequest
 
     public User ToUser { get; private set; }
 
+    private FriendRequest() { }
+
     public static FriendRequest Create(Guid fromUserId, Guid toUserId)
     {
         var now = DateTime.UtcNow;

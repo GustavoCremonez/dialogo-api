@@ -14,24 +14,24 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _context.Users.FindAsync([id], cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _context.Users.ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> FindAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<User>> FindAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken)
     {
         return await _context.Users.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public void Add(User entity)
+    public async Task AddAsync(User entity)
     {
-        _context.Users.Add(entity);
+        await _context.Users.AddAsync(entity);
     }
 
     public void Update(User entity)
@@ -44,21 +44,21 @@ public class UserRepository : IUserRepository
         _context.Users.Remove(entity);
     }
 
-    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         return await _context.Users
             .FirstOrDefaultAsync(u => u.Email == email.ToLower(), cancellationToken);
     }
 
-    public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken)
     {
         return await _context.Users
             .AnyAsync(u => u.Email == email.ToLower(), cancellationToken);
     }
 
-    public async Task<User?> GetByPublicCodeAsync(string publicCode, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByPublicCodeAsync(string publicCode, CancellationToken cancellationToken)
     {
         return await _context.Users
-            .FirstOrDefaultAsync(u => u.PublicCode == publicCode, cancellationToken);
+            .SingleOrDefaultAsync(u => u.PublicCode == publicCode, cancellationToken);
     }
 }

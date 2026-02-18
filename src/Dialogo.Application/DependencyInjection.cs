@@ -2,7 +2,7 @@ using Dialogo.Application.Features.Auth.Login;
 using Dialogo.Application.Features.Auth.Logout;
 using Dialogo.Application.Features.Auth.Refresh;
 using Dialogo.Application.Features.Auth.Register;
-using Dialogo.Application.Features.Friend.FriendRequest;
+using Dialogo.Application.Features.Friend.SendFriendRequest;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

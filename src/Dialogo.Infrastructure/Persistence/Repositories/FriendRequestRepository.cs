@@ -14,11 +14,6 @@ public class FriendRequestRepository : IFriendRequestRepository
         _context = context;
     }
 
-    public async void Add(FriendRequest entity)
-    {
-        await _context.FriendRequests.AddAsync(entity);
-    }
-
     public async Task AddAsync(FriendRequest entity)
     {
         await _context.FriendRequests.AddAsync(entity);
@@ -34,17 +29,17 @@ public class FriendRequestRepository : IFriendRequestRepository
         _context.FriendRequests.Remove(entity);
     }
 
-    public async Task<IEnumerable<FriendRequest>> FindAsync(Expression<Func<FriendRequest, bool>> predicate, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<FriendRequest>> FindAsync(Expression<Func<FriendRequest, bool>> predicate, CancellationToken cancellationToken)
     {
         return await _context.FriendRequests.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<FriendRequest>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<FriendRequest>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _context.FriendRequests.ToListAsync(cancellationToken);
     }
 
-    public async Task<FriendRequest?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<FriendRequest?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _context.FriendRequests.FindAsync([id], cancellationToken);
     }

@@ -1,6 +1,6 @@
 ﻿using Dialogo.Api.Extensions;
 using Dialogo.Application.Features.Auth.Shared;
-using Dialogo.Application.Features.Friend.FriendRequest;
+using Dialogo.Application.Features.Friend.SendFriendRequest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
