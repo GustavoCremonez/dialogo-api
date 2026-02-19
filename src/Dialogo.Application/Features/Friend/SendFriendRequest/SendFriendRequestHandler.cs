@@ -1,4 +1,5 @@
-﻿using Dialogo.Domain.Entities;
+﻿using Dialogo.Application.Features.Friend.Shared;
+using Dialogo.Domain.Entities;
 using Dialogo.Domain.Shared.Interfaces;
 using Dialogo.Domain.Shared.Results;
 
@@ -17,7 +18,7 @@ public class SendFriendRequestHandler
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<SendFriendRequestResponse>> Handle(SendFriendRequestRequest sendFriendRequestRequest, Guid fromUserId, CancellationToken cancellationToken)
+    public async Task<Result<FriendRequestResponse>> Handle(SendFriendRequestRequest sendFriendRequestRequest, Guid fromUserId, CancellationToken cancellationToken)
     {
         var toUser = await _userRepository.GetByPublicCodeAsync(sendFriendRequestRequest.PublicCode, cancellationToken);
 
@@ -33,10 +34,10 @@ public class SendFriendRequestHandler
 
         var friendRequest = FriendRequest.Create(fromUserId, toUser.Id!);
 
-        await _friendRequestRepository.AddAsync(friendRequest);
+        await _friendRequestRepository.AddAsync(friendRequest, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new SendFriendRequestResponse(friendRequest.Status);
+        return new FriendRequestResponse(friendRequest.Status);
     }
 }

@@ -29,9 +29,9 @@ public class UserRepository : IUserRepository
         return await _context.Users.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public async Task AddAsync(User entity)
+    public async Task AddAsync(User entity, CancellationToken cancellationToken)
     {
-        await _context.Users.AddAsync(entity);
+        await _context.Users.AddAsync(entity, cancellationToken);
     }
 
     public void Update(User entity)

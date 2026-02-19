@@ -29,9 +29,9 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         return await _context.RefreshTokens.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public async Task AddAsync(RefreshToken entity)
+    public async Task AddAsync(RefreshToken entity, CancellationToken cancellationToken)
     {
-        await _context.RefreshTokens.AddAsync(entity);
+        await _context.RefreshTokens.AddAsync(entity, cancellationToken);
     }
 
     public void Update(RefreshToken entity)

@@ -14,9 +14,9 @@ public class FriendRequestRepository : IFriendRequestRepository
         _context = context;
     }
 
-    public async Task AddAsync(FriendRequest entity)
+    public async Task AddAsync(FriendRequest entity, CancellationToken cancellationToken)
     {
-        await _context.FriendRequests.AddAsync(entity);
+        await _context.FriendRequests.AddAsync(entity, cancellationToken);
     }
 
     public void Update(FriendRequest entity)
@@ -52,5 +52,16 @@ public class FriendRequestRepository : IFriendRequestRepository
                 fr.Status == Domain.Enums.FriendRequestStatus.Pending);
 
         return friendRequest is not null;
+    }
+
+    public async Task<IEnumerable<FriendRequest>> GetFriendRequestByUserAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var friendRequests = await _context.FriendRequests
+            .AsNoTracking()
+            .Include(fr => fr.ToUser)
+            .Where(fr => fr.FromUserId == userId)
+            .ToListAsync(cancellationToken);
+
+        return friendRequests;
     }
 }

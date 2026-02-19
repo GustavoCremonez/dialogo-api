@@ -51,7 +51,7 @@ public class RefreshTokenHandler
         var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(refreshTokenExpirationDays);
 
         var newRefreshToken = RefreshToken.Create(user.Id, newRefreshTokenValue, refreshTokenExpiresAt);
-        await _refreshTokenRepository.AddAsync(newRefreshToken);
+        await _refreshTokenRepository.AddAsync(newRefreshToken, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
