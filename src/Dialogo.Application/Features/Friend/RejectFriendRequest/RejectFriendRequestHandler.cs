@@ -8,15 +8,22 @@ public class RejectFriendRequestHandler
 {
     private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentUserService _currentUserService;
 
-    public RejectFriendRequestHandler(IFriendRequestRepository friendRequestRepository, IUnitOfWork unitOfWork)
+    public RejectFriendRequestHandler(
+        IFriendRequestRepository friendRequestRepository,
+        IUnitOfWork unitOfWork,
+        ICurrentUserService currentUserService)
     {
         _friendRequestRepository = friendRequestRepository;
         _unitOfWork = unitOfWork;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<FriendRequestResponse>> Handle(RejectFriendRequestRequest request, Guid userId, CancellationToken cancellationToken)
+    public async Task<Result<FriendRequestResponse>> Handle(RejectFriendRequestRequest request, CancellationToken cancellationToken)
     {
+        var userId = _currentUserService.GetUserId();
+
         var friendRequest = await _friendRequestRepository.GetByIdAsync(request.RequestId, cancellationToken);
 
         if (friendRequest is null)

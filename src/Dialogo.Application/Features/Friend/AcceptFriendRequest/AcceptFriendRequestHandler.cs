@@ -10,16 +10,24 @@ public class AcceptFriendRequestHandler
     private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IFriendshipRepository _friendshipRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentUserService _currentUserService;
 
-    public AcceptFriendRequestHandler(IFriendRequestRepository friendRequestRepository, IFriendshipRepository friendshipRepository, IUnitOfWork unitOfWork)
+    public AcceptFriendRequestHandler(
+        IFriendRequestRepository friendRequestRepository,
+        IFriendshipRepository friendshipRepository,
+        IUnitOfWork unitOfWork,
+        ICurrentUserService currentUserService)
     {
         _friendRequestRepository = friendRequestRepository;
         _friendshipRepository = friendshipRepository;
         _unitOfWork = unitOfWork;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<FriendRequestResponse>> Handle(AcceptFriendRequestRequest request, Guid userId, CancellationToken cancellationToken)
+    public async Task<Result<FriendRequestResponse>> Handle(AcceptFriendRequestRequest request, CancellationToken cancellationToken)
     {
+        var userId = _currentUserService.GetUserId();
+
         var friendRequest = await _friendRequestRepository.GetByIdAsync(request.RequestId, cancellationToken);
 
         if (friendRequest is null)

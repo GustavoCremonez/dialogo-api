@@ -10,16 +10,24 @@ public class SendFriendRequestHandler
     private readonly IUserRepository _userRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentUserService _currentUserService;
 
-    public SendFriendRequestHandler(IUserRepository userRepository, IFriendRequestRepository friendRequestRepository, IUnitOfWork unitOfWork)
+    public SendFriendRequestHandler(
+        IUserRepository userRepository,
+        IFriendRequestRepository friendRequestRepository,
+        IUnitOfWork unitOfWork,
+        ICurrentUserService currentUserService)
     {
         _userRepository = userRepository;
         _friendRequestRepository = friendRequestRepository;
         _unitOfWork = unitOfWork;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<FriendRequestResponse>> Handle(SendFriendRequestRequest sendFriendRequestRequest, Guid fromUserId, CancellationToken cancellationToken)
+    public async Task<Result<FriendRequestResponse>> Handle(SendFriendRequestRequest sendFriendRequestRequest, CancellationToken cancellationToken)
     {
+        var fromUserId = _currentUserService.GetUserId();
+
         var toUser = await _userRepository.GetByPublicCodeAsync(sendFriendRequestRequest.PublicCode, cancellationToken);
 
         if (toUser is null)
