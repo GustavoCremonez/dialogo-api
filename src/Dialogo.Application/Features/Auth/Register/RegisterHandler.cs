@@ -33,7 +33,7 @@ public class RegisterHandler
 
     public async Task<Result<AuthResponse>> Handle(RegisterRequest request, CancellationToken cancellationToken)
     {
-        var emailExists = await _userRepository.ExistsByEmailAsync(request.Email, cancellationToken);
+        var emailExists = await _userRepository.ExistsAsync(u => u.Email == request.Email.ToLower(), cancellationToken);
         if (emailExists)
         {
             return Error.Conflict("User.EmailAlreadyExists", "Já existe um usuário com este email.");
