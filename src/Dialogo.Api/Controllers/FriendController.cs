@@ -6,8 +6,6 @@ using Dialogo.Application.Features.Friend.RejectFriendRequest;
 using Dialogo.Application.Features.Friend.SendFriendRequest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Dialogo.Api.Controllers;
 
@@ -53,9 +51,7 @@ public class FriendController : ControllerBase
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public async Task<IActionResult> SendRequest([FromBody] SendFriendRequestRequest request, CancellationToken cancellationToken)
     {
-        var fromUserId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-
-        var result = await _sendFriendRequestHandler.Handle(request, fromUserId, cancellationToken);
+        var result = await _sendFriendRequestHandler.Handle(request, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -76,9 +72,7 @@ public class FriendController : ControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> AcceptRequest([FromBody] AcceptFriendRequestRequest request, CancellationToken cancellationToken)
     {
-        var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-
-        var result = await _acceptFriendRequestHandler.Handle(request, userId, cancellationToken);
+        var result = await _acceptFriendRequestHandler.Handle(request, cancellationToken);
 
         return result.ToActionResult();
     }
@@ -100,9 +94,7 @@ public class FriendController : ControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> RejectRequest([FromBody] RejectFriendRequestRequest request, CancellationToken cancellationToken)
     {
-        var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-
-        var result = await _rejectFriendRequestHandler.Handle(request, userId, cancellationToken);
+        var result = await _rejectFriendRequestHandler.Handle(request, cancellationToken);
 
         return result.ToActionResult();
     }
@@ -120,9 +112,7 @@ public class FriendController : ControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetFriendRequests(CancellationToken cancellationToken)
     {
-        var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-
-        var result = await _getFriendRequestsHandler.Handle(userId, cancellationToken);
+        var result = await _getFriendRequestsHandler.Handle(cancellationToken);
 
         return result.ToActionResult();
     }
