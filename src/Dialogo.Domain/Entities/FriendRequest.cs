@@ -35,4 +35,16 @@ public class FriendRequest
             CreatedAt = now,
         };
     }
+
+    public void Accept()
+    {
+        Status = FriendRequestStatus.Accepted;
+        RespondedAt = DateTime.UtcNow;
+    }
+
+    public void Reject()
+    {
+        Status = FriendRequestStatus.Rejected;
+        RespondedAt = DateTime.UtcNow;
+    }
 }
