@@ -1,5 +1,6 @@
 ﻿using Dialogo.Application.Features.Friend.Shared;
 using Dialogo.Domain.Entities;
+using Dialogo.Domain.Enums;
 using Dialogo.Domain.Shared.Interfaces;
 using Dialogo.Domain.Shared.Results;
 
@@ -35,7 +36,9 @@ public class SendFriendRequestHandler
             return Error.NotFound("FriendRequest.ToUserNotExist", "Usuário que deseja mandar solicitação não existe.");
         }
 
-        var friendRequestExists = await _friendRequestRepository.ExistsAsync(fromUserId, toUser.Id, cancellationToken);
+        var friendRequestExists = await _friendRequestRepository.ExistsAsync(
+            fr => fr.FromUserId == fromUserId && fr.ToUserId == toUser.Id && fr.Status == FriendRequestStatus.Pending,
+            cancellationToken);
 
         if (friendRequestExists)
             return Error.Conflict("FriendRequest.AlreadyExists", "Já existe uma solicitação de amizade entre esses usuários.");
