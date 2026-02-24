@@ -5,14 +5,14 @@ namespace Dialogo.Application.Features.Friend.GetFriends;
 
 public class GetFriendRequestsHandler
 {
-    private readonly IFriendRequestRepository _friendRequestRepository;
+    private readonly IFriendshipRepository _friendshipRepository;
     private readonly ICurrentUserService _currentUserService;
 
     public GetFriendRequestsHandler(
-        IFriendRequestRepository friendRequestRepository,
+        IFriendshipRepository friendshipRepository,
         ICurrentUserService currentUserService)
     {
-        _friendRequestRepository = friendRequestRepository;
+        _friendshipRepository = friendshipRepository;
         _currentUserService = currentUserService;
     }
 
@@ -20,9 +20,10 @@ public class GetFriendRequestsHandler
     {
         var userId = _currentUserService.GetUserId();
 
-        var friends = await _friendRequestRepository.GetByUserProjectionAsync(
+        var friends = await _friendshipRepository.GetFriendsByUserAsync(
             userId,
-            fr => new FriendDto(fr.ToUserId, fr.ToUser.Name, fr.ToUser.PublicCode),
+            f => new FriendDto(f.FriendUserId, f.FriendUser.Name, f.FriendUser.PublicCode),
+            f => new FriendDto(f.UserId, f.User.Name, f.User.PublicCode),
             cancellationToken);
 
         return Result<GetFriendsResponse>.Success(new GetFriendsResponse(friends));

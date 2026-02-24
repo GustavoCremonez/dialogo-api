@@ -22,4 +22,16 @@ public class FriendRequestRepository : Repository<FriendRequest>, IFriendRequest
             .Select(projection)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<TProjection>> GetReceivedPendingProjectionAsync<TProjection>(
+        Guid userId,
+        Expression<Func<FriendRequest, TProjection>> projection,
+        CancellationToken cancellationToken)
+    {
+        return await Context.FriendRequests
+            .AsNoTracking()
+            .Where(fr => fr.ToUserId == userId && fr.Status == Domain.Enums.FriendRequestStatus.Pending)
+            .Select(projection)
+            .ToListAsync(cancellationToken);
+    }
 }

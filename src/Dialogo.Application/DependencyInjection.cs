@@ -1,9 +1,11 @@
+using Dialogo.Application.Features.Auth.GetMe;
 using Dialogo.Application.Features.Auth.Login;
 using Dialogo.Application.Features.Auth.Logout;
 using Dialogo.Application.Features.Auth.Refresh;
 using Dialogo.Application.Features.Auth.Register;
 using Dialogo.Application.Features.Friend.AcceptFriendRequest;
 using Dialogo.Application.Features.Friend.GetFriends;
+using Dialogo.Application.Features.Friend.GetReceivedRequests;
 using Dialogo.Application.Features.Friend.RejectFriendRequest;
 using Dialogo.Application.Features.Friend.SendFriendRequest;
 using FluentValidation;
@@ -21,6 +23,7 @@ public static class DependencyInjection
         services.AddAutoMapper(assembly);
         services.AddValidatorsFromAssembly(assembly);
 
+        services.AddScoped<GetMeHandler>();
         services.AddScoped<RegisterHandler>();
         services.AddScoped<LoginHandler>();
         services.AddScoped<RefreshTokenHandler>();
@@ -29,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<AcceptFriendRequestHandler>();
         services.AddScoped<RejectFriendRequestHandler>();
         services.AddScoped<GetFriendRequestsHandler>();
+        services.AddScoped<GetReceivedFriendRequestsHandler>();
 
         return services;
     }

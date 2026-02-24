@@ -9,4 +9,9 @@ public interface IFriendRequestRepository : IRepository<FriendRequest>
         Guid userId,
         Expression<Func<FriendRequest, TProjection>> projection,
         CancellationToken cancellationToken);
+
+    Task<IEnumerable<TProjection>> GetReceivedPendingProjectionAsync<TProjection>(
+        Guid userId,
+        Expression<Func<FriendRequest, TProjection>> projection,
+        CancellationToken cancellationToken);
 }

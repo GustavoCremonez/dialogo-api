@@ -3,6 +3,7 @@ using Dialogo.Application.Features.Auth.Login;
 using Dialogo.Application.Features.Auth.Logout;
 using Dialogo.Application.Features.Auth.Refresh;
 using Dialogo.Application.Features.Auth.Register;
+using Dialogo.Application.Features.Auth.GetMe;
 using Dialogo.Application.Features.Auth.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,17 +22,20 @@ public class AuthController : ControllerBase
     private readonly LoginHandler _loginHandler;
     private readonly RefreshTokenHandler _refreshTokenHandler;
     private readonly LogoutHandler _logoutHandler;
+    private readonly GetMeHandler _getMeHandler;
 
     public AuthController(
         RegisterHandler registerHandler,
         LoginHandler loginHandler,
         RefreshTokenHandler refreshTokenHandler,
-        LogoutHandler logoutHandler)
+        LogoutHandler logoutHandler,
+        GetMeHandler getMeHandler)
     {
         _registerHandler = registerHandler;
         _loginHandler = loginHandler;
         _refreshTokenHandler = refreshTokenHandler;
         _logoutHandler = logoutHandler;
+        _getMeHandler = getMeHandler;
     }
 
     /// <summary>
@@ -119,6 +123,7 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Obtém informações do usuário autenticado
     /// </summary>
+    /// <param name="cancellationToken">Token de cancelamento</param>
     /// <returns>Dados do usuário</returns>
     /// <response code="200">Informações retornadas com sucesso</response>
     /// <response code="401">Não autenticado ou token inválido</response>
@@ -126,17 +131,9 @@ public class AuthController : ControllerBase
     [HttpGet("me")]
     [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public IActionResult Me()
+    public async Task<IActionResult> Me(CancellationToken cancellationToken)
     {
-        var userId = User.FindFirst("sub")?.Value;
-        var email = User.FindFirst("email")?.Value;
-        var name = User.FindFirst("name")?.Value;
-
-        return Ok(new
-        {
-            UserId = userId,
-            Email = email,
-            Name = name
-        });
+        var result = await _getMeHandler.Handle(cancellationToken);
+        return result.ToActionResult();
     }
 }
