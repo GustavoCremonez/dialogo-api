@@ -1,6 +1,7 @@
 using Dialogo.Domain.Entities;
 using Dialogo.Domain.Shared.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Dialogo.Infrastructure.Persistence.Repositories;
 
@@ -16,9 +17,15 @@ public class UserRepository : Repository<User>, IUserRepository
             .FirstOrDefaultAsync(u => u.Email == email.ToLower(), cancellationToken);
     }
 
-    public async Task<User?> GetByPublicCodeAsync(string publicCode, CancellationToken cancellationToken)
+    public async Task<TProjection?> GetProjectionByPublicCodeAsync<TProjection>(
+        string publicCode,
+        Expression<Func<User, TProjection>> projection,
+        CancellationToken cancellationToken) where TProjection : class
     {
         return await Context.Users
-            .SingleOrDefaultAsync(u => u.PublicCode == publicCode, cancellationToken);
+            .AsNoTracking()
+            .Where(u => u.PublicCode == publicCode)
+            .Select(projection)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

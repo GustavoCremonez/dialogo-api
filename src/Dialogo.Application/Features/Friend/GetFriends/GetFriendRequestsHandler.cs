@@ -1,4 +1,3 @@
-using Dialogo.Domain.Entities;
 using Dialogo.Domain.Shared.Interfaces;
 using Dialogo.Domain.Shared.Results;
 
@@ -21,24 +20,11 @@ public class GetFriendRequestsHandler
     {
         var userId = _currentUserService.GetUserId();
 
-        var friendRequests = await _friendRequestRepository.GetFriendRequestByUserAsync(userId, cancellationToken);
-
-        var friends = MapFriend(friendRequests);
+        var friends = await _friendRequestRepository.GetByUserProjectionAsync(
+            userId,
+            fr => new FriendDto(fr.ToUserId, fr.ToUser.Name, fr.ToUser.PublicCode),
+            cancellationToken);
 
         return Result<GetFriendsResponse>.Success(new GetFriendsResponse(friends));
-    }
-
-    private List<FriendDto> MapFriend(IEnumerable<FriendRequest> friendRequests)
-    {
-        return friendRequests
-            .Select(fr =>
-            {
-                var user = fr.ToUser;
-                return new FriendDto(
-                    fr.ToUserId,
-                    user?.Name ?? string.Empty,
-                    user?.PublicCode ?? string.Empty);
-            })
-            .ToList();
     }
 }

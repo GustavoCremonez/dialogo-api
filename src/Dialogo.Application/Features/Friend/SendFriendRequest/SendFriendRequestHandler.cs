@@ -1,4 +1,4 @@
-﻿using Dialogo.Application.Features.Friend.Shared;
+using Dialogo.Application.Features.Friend.Shared;
 using Dialogo.Domain.Entities;
 using Dialogo.Domain.Enums;
 using Dialogo.Domain.Shared.Interfaces;
@@ -29,7 +29,10 @@ public class SendFriendRequestHandler
     {
         var fromUserId = _currentUserService.GetUserId();
 
-        var toUser = await _userRepository.GetByPublicCodeAsync(sendFriendRequestRequest.PublicCode, cancellationToken);
+        var toUser = await _userRepository.GetProjectionByPublicCodeAsync(
+            sendFriendRequestRequest.PublicCode,
+            u => new UserIdProjection(u.Id),
+            cancellationToken);
 
         if (toUser is null)
         {
@@ -43,7 +46,7 @@ public class SendFriendRequestHandler
         if (friendRequestExists)
             return Error.Conflict("FriendRequest.AlreadyExists", "Já existe uma solicitação de amizade entre esses usuários.");
 
-        var friendRequest = FriendRequest.Create(fromUserId, toUser.Id!);
+        var friendRequest = FriendRequest.Create(fromUserId, toUser.Id);
 
         await _friendRequestRepository.AddAsync(friendRequest, cancellationToken);
 
@@ -51,4 +54,6 @@ public class SendFriendRequestHandler
 
         return new FriendRequestResponse(friendRequest.Status);
     }
+
+    private sealed record UserIdProjection(Guid Id);
 }
